@@ -1,3 +1,4 @@
+using DataServer.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DataServer.Controllers
@@ -12,15 +13,18 @@ namespace DataServer.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private readonly ISqlService _sqlService;
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ISqlService sqlService)
         {
             _logger = logger;
+            _sqlService = sqlService;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            var reader = _sqlService.GetAll("", "");
+           
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
