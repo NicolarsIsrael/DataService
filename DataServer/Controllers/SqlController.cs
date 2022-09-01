@@ -1,4 +1,5 @@
-﻿using DataServer.Services.Contracts;
+﻿using DataServer.Dto;
+using DataServer.Services.Contracts;
 using DataServer.Services.Implementation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,18 +22,24 @@ namespace DataServer.Controllers
         [Route("select-all")]
         public async Task<IActionResult> SelectAll(string databaseName, string tableName)
         {
-            //var databaseName = "approovia_db";
-            //var tableName = "approovia.userstest";
-            var json = await _sqlService.GetAll(databaseName, tableName);
-            return Ok(json);
+            var result = await _sqlService.GetAll(databaseName, tableName);
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("select-columns")]
         public async Task<IActionResult> SelectColumns(string databaseName, string tableName, string columnNames)
         {
-            var json = await _sqlService.GetAllByColumns(databaseName, tableName, columnNames);
-            return Ok(json);
+            var result = await _sqlService.GetAllByColumns(databaseName, tableName, columnNames);
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        [Route("delete-row")]
+        public async Task<IActionResult> DeleteRow(string databaseName, string tableName, string id)
+        {
+            var result = await _sqlService.DeleteRow(databaseName, tableName, id);
+            return Ok(result);
         }
 
         //[HttpGet(Name ="insert")]

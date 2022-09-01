@@ -1,4 +1,5 @@
-﻿using DataServer.Services.Implementation;
+﻿using DataServer.Dto;
+using DataServer.Services.Implementation;
 using System.Data.Odbc;
 
 namespace DataServer.Services.Contracts
@@ -11,7 +12,7 @@ namespace DataServer.Services.Contracts
         /// <param name="databaseName">Name of the database where the table can be found</param>
         /// <param name="tableName">Name of the table where the items reside in</param>
         /// <returns></returns>
-        Task<string> GetAll(string databaseName, string tableName);
+        Task<BaseResponse> GetAll(string databaseName, string tableName);
 
         /// <summary>
         /// Retrieve columns from a table in a particular database
@@ -20,7 +21,7 @@ namespace DataServer.Services.Contracts
         /// <param name="tableName">Name of the table where the items reside in</param>
         /// <param name="columnNames">Names of the columns to be retrieved</param>
         /// <returns></returns>
-        Task<string> GetAllByColumns(string databaseName, string tableName, string columnNames);
+        Task<BaseResponse> GetAllByColumns(string databaseName, string tableName, string columnNames);
 
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace DataServer.Services.Contracts
         /// <param name="tableName">Name of the table where the item resides</param>
         /// <param name="key">Name of the key to uniquely identify the item in the table</param>
         /// <returns></returns>
-        Task<string> DeleteOne(string databaseName, string tableName, string key);
+        Task<BaseResponse> DeleteRow(string databaseName, string tableName, string Id);
 
         /// <summary>
         /// Update the details of an item in the specified table and database

@@ -1,4 +1,5 @@
 ﻿using DataServer.Connections;
+using DataServer.Dto;
 using DataServer.Services.Contracts;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,29 +16,57 @@ namespace DataServer.Services.Implementation
         {
             _config = config;
         }
-        public Task<string> DeleteOne(string databaseName, string tableName, string key)
+        public async Task<BaseResponse> DeleteRow(string databaseName, string tableName, string Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    string query = $"DELETE FROM {databaseName}.{tableName} WHERE id=\'{Id}\'";
+                    await virtuosoConn.ExecuteNonQuery(query);
+                    return new BaseResponse() { Successful = true, Message = "Successfully deleted row" };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
+            }
         }
         
-        public async Task<string> GetAll(string databaseName, string tableName)
+        public async Task<BaseResponse> GetAll(string databaseName, string tableName)
         {
-            using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+            try
             {
-                string query = $"SELECT * from {databaseName}.{tableName}";
-                var reader = virtuosoConn.ExecuteReader(query);
-                return SerializeToObject(reader);
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    string query = $"SELECT * from {databaseName}.{tableName}";
+                    var reader = virtuosoConn.ExecuteReader(query);
+                    var json = SerializeToObject(reader);
+                    return new BaseResponse() { Successful = true, Message = "Successful request", Content = json };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
             }
 
         }
 
-        public async Task<string> GetAllByColumns(string databaseName, string tableName, string columnNames)
+        public async Task<BaseResponse> GetAllByColumns(string databaseName, string tableName, string columnNames)
         {
-            using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+            try
             {
-                string query = $"SELECT {columnNames} from {databaseName}.{tableName}";
-                var reader = virtuosoConn.ExecuteReader(query);
-                return SerializeToObject(reader);
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    string query = $"SELECT {columnNames} from {databaseName}.{tableName}";
+                    var reader = virtuosoConn.ExecuteReader(query);
+                    var json = SerializeToObject(reader);
+                    return new BaseResponse() { Successful = true, Message = "Successful request", Content = json };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
             }
         }
 
