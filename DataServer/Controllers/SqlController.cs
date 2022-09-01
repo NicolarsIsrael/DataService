@@ -19,18 +19,18 @@ namespace DataServer.Controllers
         }
 
         [HttpGet]
-        [Route("select-all")]
-        public async Task<IActionResult> SelectAll(string databaseName, string tableName)
+        [Route("get-all")]
+        public async Task<IActionResult> GetAll(string databaseName, string tableName, string? columnNames)
         {
-            var result = await _sqlService.GetAll(databaseName, tableName);
+            var result = await _sqlService.GetAll(databaseName, tableName, columnNames);
             return Ok(result);
         }
 
         [HttpGet]
-        [Route("select-columns")]
-        public async Task<IActionResult> SelectColumns(string databaseName, string tableName, string columnNames)
+        [Route("get-by-key")]
+        public async Task<IActionResult> GetByKey(string databaseName, string tableName, string key, string value, string? columnNames)
         {
-            var result = await _sqlService.GetAllByColumns(databaseName, tableName, columnNames);
+            var result = await _sqlService.GetByKey(databaseName, tableName, key, value, columnNames);
             return Ok(result);
         }
 
@@ -41,6 +41,8 @@ namespace DataServer.Controllers
             var result = await _sqlService.DeleteRow(databaseName, tableName, id);
             return Ok(result);
         }
+
+
 
         //[HttpGet(Name ="insert")]
         //public async Task<string> Insert([FromRoute]dynamic body)

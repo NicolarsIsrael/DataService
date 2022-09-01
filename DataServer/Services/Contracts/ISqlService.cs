@@ -11,17 +11,9 @@ namespace DataServer.Services.Contracts
         /// </summary>
         /// <param name="databaseName">Name of the database where the table can be found</param>
         /// <param name="tableName">Name of the table where the items reside in</param>
+        /// <param name="columnNames">Names of the columns to be retrieved. By default * to retrieve all columns</param>
         /// <returns></returns>
-        Task<BaseResponse> GetAll(string databaseName, string tableName);
-
-        /// <summary>
-        /// Retrieve columns from a table in a particular database
-        /// </summary>
-        /// <param name="databaseName">Name of the database where the table can be found</param>
-        /// <param name="tableName">Name of the table where the items reside in</param>
-        /// <param name="columnNames">Names of the columns to be retrieved</param>
-        /// <returns></returns>
-        Task<BaseResponse> GetAllByColumns(string databaseName, string tableName, string columnNames);
+        Task<BaseResponse> GetAll(string databaseName, string tableName, string columnNames = "*");
 
 
         /// <summary>
@@ -30,8 +22,9 @@ namespace DataServer.Services.Contracts
         /// <param name="databaseName">Database name where the item is expected to be found</param>
         /// <param name="tableName">Table where the item is expected to be found</param>
         /// <param name="key">Parameter to which the item can be identified by</param>
+        /// <param name="columnNames">Names of the columns to be retrieved. By default * to retrieve all columns</param>
         /// <returns></returns>
-        Task<string> GetByKey(string databaseName, string tableName, string key);
+        Task<BaseResponse> GetByKey(string databaseName, string tableName, string key, string value, string columnNames = "*");
 
         /// <summary>
         /// Inserts a row into the table and database specified

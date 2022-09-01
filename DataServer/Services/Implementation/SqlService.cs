@@ -33,31 +33,13 @@ namespace DataServer.Services.Implementation
             }
         }
         
-        public async Task<BaseResponse> GetAll(string databaseName, string tableName)
+        public async Task<BaseResponse> GetAll(string databaseName, string tableName, string columnNames)
         {
             try
             {
                 using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
                 {
-                    string query = $"SELECT * from {databaseName}.{tableName}";
-                    var reader = virtuosoConn.ExecuteReader(query);
-                    var json = SerializeToObject(reader);
-                    return new BaseResponse() { Successful = true, Message = "Successful request", Content = json };
-                }
-            }
-            catch (Exception ex)
-            {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
-            }
-
-        }
-
-        public async Task<BaseResponse> GetAllByColumns(string databaseName, string tableName, string columnNames)
-        {
-            try
-            {
-                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
-                {
+                    columnNames = columnNames == null ? "*" : columnNames;
                     string query = $"SELECT {columnNames} from {databaseName}.{tableName}";
                     var reader = virtuosoConn.ExecuteReader(query);
                     var json = SerializeToObject(reader);
@@ -68,11 +50,26 @@ namespace DataServer.Services.Implementation
             {
                 return new BaseResponse() { Successful = false, Message = ex.Message };
             }
+
         }
 
-        public Task<string> GetByKey(string databaseName, string tableName, string key)
+        public async Task<BaseResponse> GetByKey(string databaseName, string tableName, string key, string value, string columnNames)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    columnNames = columnNames == null ? "*" : columnNames;
+                    string query = $"SELECT {columnNames} from {databaseName}.{tableName} WHERE {key}=\'{value}\'";
+                    var reader = virtuosoConn.ExecuteReader(query);
+                    var json = SerializeToObject(reader);
+                    return new BaseResponse() { Successful = true, Message = "Successful request", Content = json };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
+            }
         }
 
         public Task<string> InsertOne(string databaseName, string tableName, string body)
