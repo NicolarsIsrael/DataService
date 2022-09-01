@@ -14,6 +14,16 @@ namespace DataServer.Services.Contracts
         Task<string> GetAll(string databaseName, string tableName);
 
         /// <summary>
+        /// Retrieve columns from a table in a particular database
+        /// </summary>
+        /// <param name="databaseName">Name of the database where the table can be found</param>
+        /// <param name="tableName">Name of the table where the items reside in</param>
+        /// <param name="columnNames">Names of the columns to be retrieved</param>
+        /// <returns></returns>
+        Task<string> GetAllByColumns(string databaseName, string tableName, string columnNames);
+
+
+        /// <summary>
         /// Retrieve a particular item by the specified key. The item is searched for in the specified table and database provided
         /// </summary>
         /// <param name="databaseName">Database name where the item is expected to be found</param>

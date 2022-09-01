@@ -31,6 +31,16 @@ namespace DataServer.Services.Implementation
 
         }
 
+        public async Task<string> GetAllByColumns(string databaseName, string tableName, string columnNames)
+        {
+            using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+            {
+                string query = $"SELECT {columnNames} from {databaseName}.{tableName}";
+                var reader = virtuosoConn.ExecuteReader(query);
+                return SerializeToObject(reader);
+            }
+        }
+
         public Task<string> GetByKey(string databaseName, string tableName, string key)
         {
             throw new NotImplementedException();
