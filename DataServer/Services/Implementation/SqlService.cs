@@ -72,9 +72,25 @@ namespace DataServer.Services.Implementation
             }
         }
 
-        public Task<string> InsertOne(string databaseName, string tableName, string body)
+        public async Task<BaseResponse> InsertRow(string databaseName, string tableName, string columnNames, string values)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // format the column and values so sql executable query
+                values = $"\'{CreateId()}\'{FormatInsertValues(values)}";
+                columnNames = $"Id,{columnNames}";
+
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    string query = $"INSERT INTO {databaseName}.{tableName} ({columnNames}) VALUES ({values})";
+                    await virtuosoConn.ExecuteNonQuery(query);
+                    return new BaseResponse() { Successful = true, Message = "Successfully inserted row" };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
+            }
         }
 
         public Task<string> UpdateOne(string databaseName, string tableName, string key, string model)
@@ -103,6 +119,28 @@ namespace DataServer.Services.Implementation
             return json;
         }
 
+        /// <summary>
+        /// Creates and returns a random string as id
+        /// </summary>
+        /// <returns></returns>
+        private string CreateId()
+        {
+            return Guid.NewGuid().ToString();
+        }
+
+        /// <summary>
+        /// Formats the comma separeted values into an appropriate sql values by appending quotes to every value.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        private string FormatInsertValues(string values)
+        {
+            var valuesList = values.Split(",");
+            var result = "";
+            foreach (var val in valuesList)
+                result += $", \'{val}\'";
+            return result;
+        }
     }
 
 }

@@ -31,9 +31,9 @@ namespace DataServer.Services.Contracts
         /// </summary>
         /// <param name="databaseName">Name of the database to which the item will be placed</param>
         /// <param name="tableName">Name of the table to which the item will be appended to</param>
-        /// <param name="body">odel details about the item</param>
+        /// <param name="data">odel details about the item</param>
         /// <returns></returns>
-        Task<string> InsertOne(string databaseName, string tableName, string body);
+        Task<BaseResponse> InsertRow(string databaseName, string tableName, string columnNames, string values);
 
         /// <summary>
         /// Removes an item from the database. This item is uniquely identified by the key, table name and database

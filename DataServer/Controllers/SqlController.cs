@@ -3,6 +3,7 @@ using DataServer.Services.Contracts;
 using DataServer.Services.Implementation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.Data.Odbc;
 using System.Reflection;
 
@@ -42,14 +43,13 @@ namespace DataServer.Controllers
             return Ok(result);
         }
 
-
-
-        //[HttpGet(Name ="insert")]
-        //public async Task<string> Insert([FromRoute]dynamic body)
-        //{
-
-        //    return body.ToString();
-        //}
+        [HttpPost]
+        [Route("add")]
+        public async Task<IActionResult> Add(string databaseName, string tableName, string columnNames, string values)
+        {
+            var result = await _sqlService.InsertRow(databaseName.ToLower(), tableName, columnNames, values);
+            return Ok(result);
+        }
 
     }
 
