@@ -14,7 +14,7 @@ namespace DataServer.Connections
         public VirtuosoSqlConnection(IConfiguration config)
         {
             // create connection by getting the connection string from the appSettings file
-            string connString = "Driver={Virtuoso (Open Source)};Host=app.approovia.net:1111;Database=DB;Uid=iam;Pwd=iam;"; // config.GetConnectionString("ConnectionString");
+            string connString = config.GetConnectionString("DefaultConnection");
             conn = new OdbcConnection(connString);
 
             // open the connection to the virtuoso instance
@@ -44,13 +44,12 @@ namespace DataServer.Connections
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public async Task<OdbcDataReader> ExecuteReader(string query)
+        public OdbcDataReader ExecuteReader(string query)
         {
             try
             {
                 var cmd = GetCommand(query);
-                var reader = cmd.ExecuteReader();
-                return reader;
+                return cmd.ExecuteReader();
             }
             catch(Exception ex)
             {
