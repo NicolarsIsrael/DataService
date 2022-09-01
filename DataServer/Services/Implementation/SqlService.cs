@@ -20,13 +20,12 @@ namespace DataServer.Services.Implementation
             throw new NotImplementedException();
         }
         
-        public async Task<List<Person>> GetAll(string databaseName, string tableName)
+        public async Task<string> GetAll(string databaseName, string tableName)
         {
-            OdbcDataReader reader = null;
             using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
             {
                 string query = $"SELECT * from {databaseName}.{tableName}";
-                reader = virtuosoConn.ExecuteReader(query);
+                var reader = virtuosoConn.ExecuteReader(query);
                 return SerializeToObject(reader);
             }
 
@@ -48,42 +47,26 @@ namespace DataServer.Services.Implementation
         }
 
         /// <summary>
-        /// Convert
+        /// Convert reader to object
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public List<Person> SerializeToObject(OdbcDataReader reader)
+        private string SerializeToObject(OdbcDataReader reader)
         {
-            var persons = new List<Person>();
+            List<object> objects = new List<object>();
             while (reader.Read())
             {
-                var person = new Person();
-
-                PropertyInfo[] properties = typeof(Person).GetProperties();
-                foreach (PropertyInfo property in properties)
+                IDictionary<string, object> record = new Dictionary<string, object>();
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    try
-                    {
-                        property.SetValue(person, reader.GetValue(reader.GetOrdinal(property.Name)));
-                    }
-                    catch (Exception)
-                    {
-                        property.SetValue(person, null);
-                    }
+                    record.Add(reader.GetName(i), reader[i]);
                 }
-                persons.Add(person);
+                objects.Add(record);
             }
-            return persons;
+            var json = JsonConvert.SerializeObject(objects);
+            return json;
         }
 
     }
 
-    public class Person
-    {
-        public string userid { get; set; }
-        public string firstname { get; set; }
-        public string lastname { get; set; }
-        public string Secret { get; set; }
-        public string Country { get; set; }
-    }
 }

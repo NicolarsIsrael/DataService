@@ -11,7 +11,7 @@ namespace DataServer.Services.Contracts
         /// <param name="databaseName">Name of the database where the table can be found</param>
         /// <param name="tableName">Name of the table where the items reside in</param>
         /// <returns></returns>
-        Task<List<Person>> GetAll(string databaseName, string tableName);
+        Task<string> GetAll(string databaseName, string tableName);
 
         /// <summary>
         /// Retrieve a particular item by the specified key. The item is searched for in the specified table and database provided

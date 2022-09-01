@@ -18,10 +18,10 @@ namespace DataServer.Controllers
         }
 
         [HttpGet(Name = "select-all")]
-        public async Task<List<Person>> Select(/*string databaseName, string tableName*/)
+        public async Task<string> Select(string databaseName, string tableName)
         {
-            var databaseName = "approovia_db";
-            var tableName = "approovia.userstest";
+            //var databaseName = "approovia_db";
+            //var tableName = "approovia.userstest";
             var reader = await _sqlService.GetAll(databaseName, tableName);
             return reader;
         }
