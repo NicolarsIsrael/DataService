@@ -76,7 +76,7 @@ namespace DataServer.Services.Implementation
         {
             try
             {
-                // format the column and values so sql executable query
+                // format the column and values to sql executable query
                 values = $"\'{CreateId()}\'{FormatInsertValues(values)}";
                 columnNames = $"Id,{columnNames}";
 
@@ -93,9 +93,23 @@ namespace DataServer.Services.Implementation
             }
         }
 
-        public Task<string> UpdateOne(string databaseName, string tableName, string key, string model)
+        public async Task<BaseResponse> UpdateRow(string databaseName, string tableName, string id, string columnNames, string values)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // format the column and values to sql executable query
+                var updatingColumns = FormatUpdateValues(columnNames, values);
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    string query = $"UPDATE {databaseName}.{tableName} SET {updatingColumns} WHERE id = \'{id}\'";
+                    await virtuosoConn.ExecuteNonQuery(query);
+                    return new BaseResponse() { Successful = true, Message = "Successfully inserted row" };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
+            }
         }
 
         /// <summary>
@@ -140,6 +154,24 @@ namespace DataServer.Services.Implementation
             foreach (var val in valuesList)
                 result += $", \'{val}\'";
             return result;
+        }
+
+        /// <summary>
+        /// Formats the comma seperated column names and value names into the appropriate sql set values
+        /// </summary>
+        /// <param name="columnNames"></param>
+        /// <param name="valueNames"></param>
+        /// <returns></returns>
+        private string FormatUpdateValues(string columnNames, string valueNames)
+        {
+            string result = "";
+            var columnList = columnNames.Split(",");
+            var valueList = valueNames.Split(",");
+            for (int i = 0; i < columnList.Length && i < valueList.Length; i++)
+            {
+                result += $" {columnList[i]} = \'{valueList[i]}\',";
+            }
+            return result.TrimEnd(',');
         }
     }
 

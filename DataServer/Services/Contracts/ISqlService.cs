@@ -52,6 +52,6 @@ namespace DataServer.Services.Contracts
         /// <param name="key">Name of the key to uniquely identify the time in the table</param>
         /// <param name="model">Request parameter change</param>
         /// <returns></returns>
-        Task<string> UpdateOne(string databaseName, string tableName, string key, string model);
+        Task<BaseResponse> UpdateRow(string databaseName, string tableName, string id, string columnNames, string values);
     }
 }
