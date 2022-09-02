@@ -1,5 +1,6 @@
 ﻿using DataServer.Connections;
 using DataServer.Dto;
+using DataServer.Dto.Models;
 using DataServer.Services.Contracts;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -72,19 +73,20 @@ namespace DataServer.Services.Implementation
             }
         }
 
-        public async Task<BaseResponse> InsertRow(string databaseName, string tableName, string columnNames, string values)
+        public async Task<BaseResponse> InsertRow(string databaseName, string tableName, InsertDto data)
         {
             try
             {
                 // format the column and values to sql executable query
-                values = $"\'{CreateId()}\'{FormatInsertValues(values)}";
-                columnNames = $"Id,{columnNames}";
+                var colandValues = data.FormatDataSets();
+                var columns = colandValues[0];
+                var values = colandValues[1];
 
                 using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
                 {
-                    string query = $"INSERT INTO {databaseName}.{tableName} ({columnNames}) VALUES ({values})";
+                    string query = $"INSERT INTO {databaseName}.{tableName} ({columns}) VALUES ({values})";
                     await virtuosoConn.ExecuteNonQuery(query);
-                    return new BaseResponse() { Successful = true, Message = "Successfully inserted row" };
+                    return new BaseResponse() { Successful = true, Message = "Successfully inserted row"};
                 }
             }
             catch (Exception ex)
@@ -133,28 +135,6 @@ namespace DataServer.Services.Implementation
             return json;
         }
 
-        /// <summary>
-        /// Creates and returns a random string as id
-        /// </summary>
-        /// <returns></returns>
-        private string CreateId()
-        {
-            return Guid.NewGuid().ToString();
-        }
-
-        /// <summary>
-        /// Formats the comma separeted values into an appropriate sql values by appending quotes to every value.
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        private string FormatInsertValues(string values)
-        {
-            var valuesList = values.Split(",");
-            var result = "";
-            foreach (var val in valuesList)
-                result += $", \'{val}\'";
-            return result;
-        }
 
         /// <summary>
         /// Formats the comma seperated column names and value names into the appropriate sql set values

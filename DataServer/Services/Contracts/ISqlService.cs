@@ -1,4 +1,5 @@
 ﻿using DataServer.Dto;
+using DataServer.Dto.Models;
 using DataServer.Services.Implementation;
 using System.Data.Odbc;
 
@@ -33,7 +34,7 @@ namespace DataServer.Services.Contracts
         /// <param name="tableName">Name of the table to which the item will be appended to</param>
         /// <param name="data">odel details about the item</param>
         /// <returns></returns>
-        Task<BaseResponse> InsertRow(string databaseName, string tableName, string columnNames, string values);
+        Task<BaseResponse> InsertRow(string databaseName, string tableName, InsertDto data);
 
         /// <summary>
         /// Removes an item from the database. This item is uniquely identified by the key, table name and database

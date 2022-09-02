@@ -1,8 +1,10 @@
 ﻿using DataServer.Dto;
+using DataServer.Dto.Models;
 using DataServer.Services.Contracts;
 using DataServer.Services.Implementation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data.Odbc;
 using System.Reflection;
@@ -45,9 +47,9 @@ namespace DataServer.Controllers
 
         [HttpPost]
         [Route("add-row")]
-        public async Task<IActionResult> Add(string databaseName, string tableName, string columnNames, string values)
+        public async Task<IActionResult> Add(string databaseName, string tableName,[FromBody] InsertDto data)
         {
-            var result = await _sqlService.InsertRow(databaseName.ToLower(), tableName, columnNames, values);
+            var result = await _sqlService.InsertRow(databaseName.ToLower(), tableName, data);
             return Ok(result);
         }
 
@@ -58,6 +60,12 @@ namespace DataServer.Controllers
             var result = await _sqlService.UpdateRow(databaseName, tableName, id, columnNames, values);
             return Ok(result);
         }
+    }
+
+    public class Person
+    {
+        public string lastname { get; set; }
+        public string firstname { get; set; }
     }
 
 }
