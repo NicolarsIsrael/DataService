@@ -5,7 +5,7 @@
         public List<InsertDataSet> DataSets { get; set; }
 
         /// <summary>
-        /// Formats the comma separeted values into an appropriate sql values by appending quotes to every value.
+        /// Formats the datasets to an execuatable sql query
         /// </summary>
         /// <returns></returns>
         public string [] FormatDataSets()

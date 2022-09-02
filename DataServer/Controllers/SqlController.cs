@@ -47,7 +47,7 @@ namespace DataServer.Controllers
 
         [HttpPost]
         [Route("add-row")]
-        public async Task<IActionResult> Add(string databaseName, string tableName,[FromBody] InsertDto data)
+        public async Task<IActionResult> Add(string databaseName, string tableName, [FromBody] InsertDto data)
         {
             var result = await _sqlService.InsertRow(databaseName.ToLower(), tableName, data);
             return Ok(result);
@@ -55,9 +55,9 @@ namespace DataServer.Controllers
 
         [HttpPut]
         [Route("update-row")]
-        public async Task<IActionResult> Update(string databaseName, string tableName, string id, string columnNames, string values)
+        public async Task<IActionResult> Update(string databaseName, string tableName, [FromBody] UpdateDto data)
         {
-            var result = await _sqlService.UpdateRow(databaseName, tableName, id, columnNames, values);
+            var result = await _sqlService.UpdateRow(databaseName, tableName, data);
             return Ok(result);
         }
     }

@@ -95,15 +95,16 @@ namespace DataServer.Services.Implementation
             }
         }
 
-        public async Task<BaseResponse> UpdateRow(string databaseName, string tableName, string id, string columnNames, string values)
+        public async Task<BaseResponse> UpdateRow(string databaseName, string tableName, UpdateDto data)
         {
             try
             {
                 // format the column and values to sql executable query
-                var updatingColumns = FormatUpdateValues(columnNames, values);
+                var updatingColumns = data.FormatDataSets();
+
                 using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
                 {
-                    string query = $"UPDATE {databaseName}.{tableName} SET {updatingColumns} WHERE id = \'{id}\'";
+                    string query = $"UPDATE {databaseName}.{tableName} SET {updatingColumns} WHERE id = \'{data.Id}\'";
                     await virtuosoConn.ExecuteNonQuery(query);
                     return new BaseResponse() { Successful = true, Message = "Successfully inserted row" };
                 }
@@ -135,24 +136,6 @@ namespace DataServer.Services.Implementation
             return json;
         }
 
-
-        /// <summary>
-        /// Formats the comma seperated column names and value names into the appropriate sql set values
-        /// </summary>
-        /// <param name="columnNames"></param>
-        /// <param name="valueNames"></param>
-        /// <returns></returns>
-        private string FormatUpdateValues(string columnNames, string valueNames)
-        {
-            string result = "";
-            var columnList = columnNames.Split(",");
-            var valueList = valueNames.Split(",");
-            for (int i = 0; i < columnList.Length && i < valueList.Length; i++)
-            {
-                result += $" {columnList[i]} = \'{valueList[i]}\',";
-            }
-            return result.TrimEnd(',');
-        }
     }
 
 }

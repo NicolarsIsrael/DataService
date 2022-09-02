@@ -32,7 +32,7 @@ namespace DataServer.Services.Contracts
         /// </summary>
         /// <param name="databaseName">Name of the database to which the item will be placed</param>
         /// <param name="tableName">Name of the table to which the item will be appended to</param>
-        /// <param name="data">odel details about the item</param>
+        /// <param name="data">model details about the item</param>
         /// <returns></returns>
         Task<BaseResponse> InsertRow(string databaseName, string tableName, InsertDto data);
 
@@ -50,9 +50,8 @@ namespace DataServer.Services.Contracts
         /// </summary>
         /// <param name="databaseName">Name of the database where the item is located</param>
         /// <param name="tableName">Name of the table where the item resides</param>
-        /// <param name="key">Name of the key to uniquely identify the time in the table</param>
-        /// <param name="model">Request parameter change</param>
+        /// <param name="data">model details about the item</param>
         /// <returns></returns>
-        Task<BaseResponse> UpdateRow(string databaseName, string tableName, string id, string columnNames, string values);
+        Task<BaseResponse> UpdateRow(string databaseName, string tableName, UpdateDto data);
     }
 }
