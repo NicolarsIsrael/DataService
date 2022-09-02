@@ -1,9 +1,9 @@
 ﻿namespace DataServer.Dto.Models
 {
-    public class UpdateDto
+    public class UpdateRowDto
     {
         public string Id { get; set; }
-        public List<UpdateDataSet> DataSets { get; set; }
+        public List<UpdateRowDataSet> datasets { get; set; }
 
         /// <summary>
         /// Format list of data sets into executable sql codes
@@ -12,17 +12,20 @@
         public string FormatDataSets()
         {
             string updatingColumns = "";
-            foreach (var dataSet in DataSets)
+            if (datasets.Count == 0)
+                return "";
+
+            foreach (var dataSet in datasets)
             {
-                updatingColumns += $" {dataSet.Column} = \'{dataSet.Value}\',";
+                updatingColumns += $" {dataSet.column} = \'{dataSet.value}\',";
             }
             return updatingColumns.TrimEnd(',');
         }
     }
 
-    public class UpdateDataSet
+    public class UpdateRowDataSet
     {
-        public string Column { get; set; }
-        public string Value { get; set; }
+        public string column { get; set; }
+        public string value { get; set; }
     }
 }

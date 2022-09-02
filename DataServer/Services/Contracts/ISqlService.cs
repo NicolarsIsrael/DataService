@@ -34,7 +34,7 @@ namespace DataServer.Services.Contracts
         /// <param name="tableName">Name of the table to which the item will be appended to</param>
         /// <param name="data">model details about the item</param>
         /// <returns></returns>
-        Task<BaseResponse> InsertRow(string databaseName, string tableName, InsertDto data);
+        Task<BaseResponse> InsertRow(string databaseName, string tableName, InsertRowDto data);
 
         /// <summary>
         /// Removes an item from the database. This item is uniquely identified by the key, table name and database
@@ -52,6 +52,15 @@ namespace DataServer.Services.Contracts
         /// <param name="tableName">Name of the table where the item resides</param>
         /// <param name="data">model details about the item</param>
         /// <returns></returns>
-        Task<BaseResponse> UpdateRow(string databaseName, string tableName, UpdateDto data);
+        Task<BaseResponse> UpdateRow(string databaseName, string tableName, UpdateRowDto data);
+
+        /// <summary>
+        /// Creates table in the specified database
+        /// </summary>
+        /// <param name="databaseName"></param>
+        /// <param name="tableName"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        Task<BaseResponse> CreateTable(string databaseName, string tableName, CreateTableDto data);
     }
 }

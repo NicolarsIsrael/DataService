@@ -17,6 +17,24 @@ namespace DataServer.Services.Implementation
         {
             _config = config;
         }
+
+        public async Task<BaseResponse> CreateTable(string databaseName, string tableName, CreateTableDto data)
+        {
+            try
+            {
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    string query = $"CREATE TABLE {databaseName}.{tableName} ({data.FormatColumns()})";
+                    await virtuosoConn.ExecuteNonQuery(query);
+                    return new BaseResponse() { Successful = true, Message = "Successfully created table" };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
+            }
+        }
+
         public async Task<BaseResponse> DeleteRow(string databaseName, string tableName, string Id)
         {
             try
@@ -73,7 +91,7 @@ namespace DataServer.Services.Implementation
             }
         }
 
-        public async Task<BaseResponse> InsertRow(string databaseName, string tableName, InsertDto data)
+        public async Task<BaseResponse> InsertRow(string databaseName, string tableName, InsertRowDto data)
         {
             try
             {
@@ -95,7 +113,7 @@ namespace DataServer.Services.Implementation
             }
         }
 
-        public async Task<BaseResponse> UpdateRow(string databaseName, string tableName, UpdateDto data)
+        public async Task<BaseResponse> UpdateRow(string databaseName, string tableName, UpdateRowDto data)
         {
             try
             {
@@ -106,7 +124,7 @@ namespace DataServer.Services.Implementation
                 {
                     string query = $"UPDATE {databaseName}.{tableName} SET {updatingColumns} WHERE id = \'{data.Id}\'";
                     await virtuosoConn.ExecuteNonQuery(query);
-                    return new BaseResponse() { Successful = true, Message = "Successfully inserted row" };
+                    return new BaseResponse() { Successful = true, Message = "Successfully updated row" };
                 }
             }
             catch (Exception ex)
