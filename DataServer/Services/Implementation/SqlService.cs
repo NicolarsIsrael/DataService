@@ -150,6 +150,23 @@ namespace DataServer.Services.Implementation
             }
         }
 
+        public async Task<BaseResponse> DeleteColumn(string databaseName, string tableName, DeleteColumnDto data)
+        {
+            try
+            {
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    string query = $"ALTER TABLE {databaseName}.{tableName} DROP {data.FormatColumn()}";
+                    await virtuosoConn.ExecuteNonQuery(query);
+                    return new BaseResponse() { Successful = true, Message = "Successfully deleted column" };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
+            }
+        }
+
         /// <summary>
         /// Convert reader to object
         /// </summary>

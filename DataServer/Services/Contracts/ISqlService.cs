@@ -71,5 +71,14 @@ namespace DataServer.Services.Contracts
         /// <param name="data">Details of the column</param>
         /// <returns></returns>
         Task<BaseResponse> AddColumn(string databaseName, string tableName, AddColumnDto data);
+
+        /// <summary>
+        /// Delete column from the specified database
+        /// </summary>
+        /// <param name="databaseName">Name of the database where the column is to be removed from</param>
+        /// <param name="tableName">Name of the table to remove the specified column</param>
+        /// <param name="data">Details of the column</param>
+        /// <returns></returns>
+        Task<BaseResponse> DeleteColumn(string databaseName, string tableName, DeleteColumnDto data);
     }
 }

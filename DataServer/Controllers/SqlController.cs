@@ -76,6 +76,15 @@ namespace DataServer.Controllers
             var result = await (_sqlService.AddColumn(databaseName, tableName, data));
             return Ok(result);
         }
+
+
+        [HttpDelete]
+        [Route("delete-column")]
+        public async Task<IActionResult> DeleteColumn(string databaseName, string tableName, DeleteColumnDto data)
+        {
+            var result = await (_sqlService.DeleteColumn(databaseName, tableName, data));
+            return Ok(result);
+        }
     }
 
 }
