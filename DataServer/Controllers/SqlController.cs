@@ -68,6 +68,14 @@ namespace DataServer.Controllers
             var result = await (_sqlService.CreateTable(databaseName.ToLower(), tableName, data));
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("add-column")]
+        public async Task<IActionResult> AddColumn(string databaseName, string tableName, AddColumnDto data)
+        {
+            var result = await (_sqlService.AddColumn(databaseName, tableName, data));
+            return Ok(result);
+        }
     }
 
 }

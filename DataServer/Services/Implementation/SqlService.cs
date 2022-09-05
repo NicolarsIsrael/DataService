@@ -133,6 +133,23 @@ namespace DataServer.Services.Implementation
             }
         }
 
+        public async Task<BaseResponse> AddColumn(string databaseName, string tableName, AddColumnDto data)
+        {
+            try
+            {
+                using (VirtuosoSqlConnection virtuosoConn = new VirtuosoSqlConnection(_config))
+                {
+                    string query = $"ALTER TABLE {databaseName}.{tableName} ADD {data.FormatColumn()}";
+                    await virtuosoConn.ExecuteNonQuery(query);
+                    return new BaseResponse() { Successful = true, Message = "Successfully added column" };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse() { Successful = false, Message = ex.Message };
+            }
+        }
+
         /// <summary>
         /// Convert reader to object
         /// </summary>

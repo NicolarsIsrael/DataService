@@ -12,7 +12,7 @@
 
             foreach (var column in columns)
             {
-                // column name
+                // column name and datatype
                 var columnDetails = $" {column.name} {column.dataType}";
 
                 // primary key

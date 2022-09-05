@@ -62,5 +62,14 @@ namespace DataServer.Services.Contracts
         /// <param name="data"></param>
         /// <returns></returns>
         Task<BaseResponse> CreateTable(string databaseName, string tableName, CreateTableDto data);
+
+        /// <summary>
+        /// Add column to the specified database
+        /// </summary>
+        /// <param name="databaseName">Name of the database where the column is to be added</param>
+        /// <param name="tableName">Name of the table to add the column</param>
+        /// <param name="data">Details of the column</param>
+        /// <returns></returns>
+        Task<BaseResponse> AddColumn(string databaseName, string tableName, AddColumnDto data);
     }
 }
