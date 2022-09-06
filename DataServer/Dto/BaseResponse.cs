@@ -2,8 +2,8 @@
 {
     public class BaseResponse
     {
-        public bool Successful { get; set; }
-        public string Message { get; set; }
-        public string Content { get; set; }
+        public bool status { get; set; }
+        public string message { get; set; }
+        public string data { get; set; }
     }
 }

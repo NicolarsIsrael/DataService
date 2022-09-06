@@ -26,12 +26,12 @@ namespace DataServer.Services.Implementation
                 {
                     string query = $"CREATE TABLE {databaseName}.{tableName} ({data.FormatColumns()})";
                     await virtuosoConn.ExecuteNonQuery(query);
-                    return new BaseResponse() { Successful = true, Message = "Successfully created table" };
+                    return new BaseResponse() { status = true, message = "Successfully created table" };
                 }
             }
             catch (Exception ex)
             {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
+                return new BaseResponse() { status = false, message = ex.Message };
             }
         }
 
@@ -43,12 +43,12 @@ namespace DataServer.Services.Implementation
                 {
                     string query = $"DELETE FROM {databaseName}.{tableName} WHERE id=\'{Id}\'";
                     await virtuosoConn.ExecuteNonQuery(query);
-                    return new BaseResponse() { Successful = true, Message = "Successfully deleted row" };
+                    return new BaseResponse() { status = true, message = "Successfully deleted row" };
                 }
             }
             catch (Exception ex)
             {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
+                return new BaseResponse() { status = false, message = ex.Message };
             }
         }
         
@@ -62,12 +62,12 @@ namespace DataServer.Services.Implementation
                     string query = $"SELECT {columnNames} from {databaseName}.{tableName}";
                     var reader = virtuosoConn.ExecuteReader(query);
                     var json = SerializeToObject(reader);
-                    return new BaseResponse() { Successful = true, Message = "Successful request", Content = json };
+                    return new BaseResponse() { status = true, message = "Successful request", data = json };
                 }
             }
             catch (Exception ex)
             {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
+                return new BaseResponse() { status = false, message = ex.Message };
             }
 
         }
@@ -82,12 +82,12 @@ namespace DataServer.Services.Implementation
                     string query = $"SELECT {columnNames} from {databaseName}.{tableName} WHERE {key}=\'{value}\'";
                     var reader = virtuosoConn.ExecuteReader(query);
                     var json = SerializeToObject(reader);
-                    return new BaseResponse() { Successful = true, Message = "Successful request", Content = json };
+                    return new BaseResponse() { status = true, message = "Successful request", data = json };
                 }
             }
             catch (Exception ex)
             {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
+                return new BaseResponse() { status = false, message = ex.Message };
             }
         }
 
@@ -104,12 +104,12 @@ namespace DataServer.Services.Implementation
                 {
                     string query = $"INSERT INTO {databaseName}.{tableName} ({columns}) VALUES ({values})";
                     await virtuosoConn.ExecuteNonQuery(query);
-                    return new BaseResponse() { Successful = true, Message = "Successfully inserted row"};
+                    return new BaseResponse() { status = true, message = "Successfully inserted row"};
                 }
             }
             catch (Exception ex)
             {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
+                return new BaseResponse() { status = false, message = ex.Message };
             }
         }
 
@@ -124,12 +124,12 @@ namespace DataServer.Services.Implementation
                 {
                     string query = $"UPDATE {databaseName}.{tableName} SET {updatingColumns} WHERE id = \'{data.Id}\'";
                     await virtuosoConn.ExecuteNonQuery(query);
-                    return new BaseResponse() { Successful = true, Message = "Successfully updated row" };
+                    return new BaseResponse() { status = true, message = "Successfully updated row" };
                 }
             }
             catch (Exception ex)
             {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
+                return new BaseResponse() { status = false, message = ex.Message };
             }
         }
 
@@ -141,12 +141,12 @@ namespace DataServer.Services.Implementation
                 {
                     string query = $"ALTER TABLE {databaseName}.{tableName} ADD {data.FormatColumn()}";
                     await virtuosoConn.ExecuteNonQuery(query);
-                    return new BaseResponse() { Successful = true, Message = "Successfully added column" };
+                    return new BaseResponse() { status = true, message = "Successfully added column" };
                 }
             }
             catch (Exception ex)
             {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
+                return new BaseResponse() { status = false, message = ex.Message };
             }
         }
 
@@ -158,12 +158,12 @@ namespace DataServer.Services.Implementation
                 {
                     string query = $"ALTER TABLE {databaseName}.{tableName} DROP {data.FormatColumn()}";
                     await virtuosoConn.ExecuteNonQuery(query);
-                    return new BaseResponse() { Successful = true, Message = "Successfully deleted column" };
+                    return new BaseResponse() { status = true, message = "Successfully deleted column" };
                 }
             }
             catch (Exception ex)
             {
-                return new BaseResponse() { Successful = false, Message = ex.Message };
+                return new BaseResponse() { status = false, message = ex.Message };
             }
         }
 
